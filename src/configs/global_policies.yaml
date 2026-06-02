@@ -1,0 +1,14 @@
+EU:
+  - type: transactional
+    channel: email
+    enabled: false
+  - type: marketing
+    channel: push
+    enabled: false
+China:
+  - type: transactional
+    channel: sms
+    enabled: false
+  - type: markeing
+    channel: sms
+    enabled: false

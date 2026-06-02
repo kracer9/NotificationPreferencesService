@@ -1,0 +1,6 @@
+- type: transactional
+  channel: push
+  enabled: true
+- type: marketing
+  channel: email
+  enabled: true
