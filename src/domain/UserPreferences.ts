@@ -80,6 +80,19 @@ export default class UserPreferences {
     }
 
     private updatePreferencesMap(preferences: NotificationPreference[]) {
+        this.deleteExcessivePreferences(preferences);
+        this.storePreferences(preferences);
+    }
+
+    private deleteExcessivePreferences(preferencesToKeep: NotificationPreference[])  {
+        const symbolsToKeep = preferencesToKeep.map(item => item.symbol);
+
+        this.preferences
+            .filter(item => !symbolsToKeep.includes(item.symbol))
+            .forEach(item => this._preferences.delete(item.symbol));
+    }
+
+    private storePreferences(preferences: NotificationPreference[]) {
         preferences.forEach(this.storePreference.bind(this));
     }
 

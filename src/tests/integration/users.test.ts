@@ -5,6 +5,7 @@ import UserPreferences from "../../domain/UserPreferences.ts";
 import QuietHours from "../../domain/QuietHours.ts";
 import DefaultPreferences from "../../domain/DefaultPreferences.ts";
 import DefaultPreference from "../../domain/DefaultPreference.ts";
+import NotFound from "../../errors/NotFound.ts";
 
 const repo = await initializeRepository();
 
@@ -54,7 +55,7 @@ describe('user service', async () => {
     });
 
     test('get with wrong id should throw error', async () => {
-        await expect(service.getUserPreferences(-2)).rejects.toThrow(Error);
+        await expect(service.getUserPreferences(-2)).rejects.toThrow(NotFound);
     });
 
     test('get should return data', async () => {
@@ -131,5 +132,21 @@ describe('user service', async () => {
             channel: 'push',
             enabled: true,
         });
+    });
+
+    test('put one more preference should not change existed', async () => {
+        const preference = await service.putNotificationPreference(userId, {
+            type: 'marketing',
+            channel: 'email',
+            enabled: true,
+        });
+        expect(preference.id).toBeGreaterThan(0);
+
+        const user = await service.getUserPreferences(userId);
+        expect(user.preferences.length).toBe(2);
+        expect(user.getPreference('transactional', 'push')).not.toBeUndefined();
+        expect(user.getPreference('transactional', 'push')?.enabled).toBeTruthy();
+        expect(user.getPreference('marketing', 'email')).not.toBeUndefined();
+        expect(user.getPreference('marketing', 'email')?.enabled).toBeTruthy();
     });
 });
