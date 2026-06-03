@@ -13,7 +13,7 @@ export default class UserService {
     }
 
     public async getUserPreferences(userId: number): Promise<UserPreferences> {
-        const user = await this.repo.getUserPreferences(userId);
+        const user = await this.repo.userPreferences.get(userId);
         if (!user) {
             throw new Error(`Не найден пользователь ${userId}`);
         }
@@ -21,7 +21,7 @@ export default class UserService {
     }
 
     public async postUserPreferences(userId: number, data: PostUserPreferencesDTO): Promise<UserPreferences> {
-        let user = await this.repo.getUserPreferences(userId);
+        let user = await this.repo.userPreferences.get(userId);
         if (!user) {
             return await this.createUserPreferences(userId, data);
         } else {
@@ -47,7 +47,7 @@ export default class UserService {
         }
 
         const user = new UserPreferences(userData);
-        return await this.repo.saveUserPreferences(user);
+        return await this.repo.userPreferences.save(user);
     }
 
     private async updateUserPreferences(user: UserPreferences, data: PostUserPreferencesDTO): Promise<UserPreferences> {
@@ -59,7 +59,7 @@ export default class UserService {
             user.setPreferences(this.factoryPreferences(data));
         }
 
-        return await this.repo.saveUserPreferences(user);
+        return await this.repo.userPreferences.save(user);
     }
 
     private factoryPreferences(data: PostUserPreferencesDTO): NotificationPreference[] {
@@ -72,7 +72,7 @@ export default class UserService {
     }
 
     private async getDefaultPreferences(): Promise<NotificationPreference[]> {
-        const defaults = await this.repo.getDefaultPreferences();
+        const defaults = await this.repo.defaultPreferences.get();
 
         return defaults.getPreferences().map(item => {
             return new NotificationPreference(item.preference);

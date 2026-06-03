@@ -4,7 +4,6 @@ import type EvaluateRequestDTO from "./dto/EvaluateRequestDTO.ts";
 import type PostUserPreferencesDTO from "./dto/PostUserPreferencesDTO.ts";
 import UserService from "./services/UserService.ts";
 import EvaluationService from "./services/Evaluation/EvaluationService.ts";
-import GlobalPoliciesService from "./services/GlobalPolicies.ts";
 
 const routes = express.Router();
 
@@ -21,12 +20,6 @@ routes.get("/users/:id/preferences", async (req, res) => {
     const service = new UserService();
     const user = await service.getUserPreferences(userId);
     res.json(user.data);
-});
-
-routes.get("/global_policies", async (_req, res) => {
-    const service = new GlobalPoliciesService();
-    const response = await service.getPolicies();
-    res.json(response);
 });
 
 routes.post("/evaluate", async (req, res) => {

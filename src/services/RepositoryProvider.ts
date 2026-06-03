@@ -1,17 +1,34 @@
 import type RepositoryInterface from "./RepositoryInterface.ts";
-import Repository from "../repos/TypeORM/Repository.ts";
 import PostgresDataSource from "../repos/TypeORM/PostgresDataSource.ts";
+import Transaction from "../repos/TypeORM/Transaction.ts";
+import UserPreferencesRepository from "../repos/TypeORM/UserPreferencesRepository.ts";
+import DefaultPreferencesRepository from "../repos/yaml/DefaultPreferencesRepository.ts";
+import GlobalPoliciesRepository from "../repos/yaml/GlobalPoliciesRepository.ts";
 
-const dataSource = PostgresDataSource;
-const repository = new Repository(dataSource);
+let repository: RepositoryInterface;
 
 export async function initializeRepository(): Promise<RepositoryInterface> {
-    if (!dataSource.isInitialized) {
-        await dataSource.initialize();
-    }
+    if (repository) return repository;
+
+    await PostgresDataSource.initialize();
+
+    const queryRunner = PostgresDataSource.createQueryRunner();
+    const manager = queryRunner.manager;
+    const transaction = new Transaction(queryRunner);
+
+    repository = {
+        transaction: transaction,
+        userPreferences: new UserPreferencesRepository(manager, transaction),
+        defaultPreferences: new DefaultPreferencesRepository(),
+        globalPolicies: new GlobalPoliciesRepository(),
+    };
+
     return repository;
 }
 
 export function provideRepository(): RepositoryInterface {
+    if (!repository) {
+        throw new Error('Репозиторий не инициализирован');
+    }
     return repository;
 }

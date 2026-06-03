@@ -1,21 +1,15 @@
 import { afterAll, describe, test, expect } from "vitest";
 import { initializeRepository } from "../../services/RepositoryProvider.ts";
 import UserService from "../../services/UserService.ts";
-import DefaultPreferences from "../../domain/DefaultPreferences.ts";
 import UserPreferences from "../../domain/UserPreferences.ts";
-import DefaultPreference from "../../domain/DefaultPreference.ts";
 import QuietHours from "../../domain/QuietHours.ts";
+import DefaultPreferences from "../../domain/DefaultPreferences.ts";
+import DefaultPreference from "../../domain/DefaultPreference.ts";
 
 const repo = await initializeRepository();
 
-describe('user service', async () => {
-    afterAll(async () => {
-        await repo.transaction.rollback();
-    });
-
-    await repo.transaction.start();
-
-    await repo.saveDefaultPreferences(new DefaultPreferences([
+repo.defaultPreferences.get = async () => {
+    return new DefaultPreferences([
         new DefaultPreference({
             type: 'transactional',
             channel: 'sms',
@@ -26,7 +20,15 @@ describe('user service', async () => {
             channel: 'email',
             enabled: false,
         }),
-    ]));
+    ]);
+};
+
+describe('user service', async () => {
+    afterAll(async () => {
+        await repo.transaction.rollback();
+    });
+
+    await repo.transaction.start();
 
     const service = new UserService();
     const userId = -1;
@@ -39,12 +41,12 @@ describe('user service', async () => {
         expect(user.quietHours).toBeUndefined();
         expect(user.preferences).toBeInstanceOf(Array);
         expect(user.preferences.length).toBe(2);
-        expect(user.preferences[0]).toMatchObject({
+        expect(user.preferences[0].data).toMatchObject({
             type: 'transactional',
             channel: 'sms',
             enabled: true,
         });
-        expect(user.preferences[1]).toMatchObject({
+        expect(user.preferences[1].data).toMatchObject({
             type: 'marketing',
             channel: 'email',
             enabled: false,
@@ -63,12 +65,12 @@ describe('user service', async () => {
         expect(user.quietHours).toBeUndefined();
         expect(user.preferences).toBeInstanceOf(Array);
         expect(user.preferences.length).toBe(2);
-        expect(user.preferences[0]).toMatchObject({
+        expect(user.preferences[0].data).toMatchObject({
             type: 'transactional',
             channel: 'sms',
             enabled: true,
         });
-        expect(user.preferences[1]).toMatchObject({
+        expect(user.preferences[1].data).toMatchObject({
             type: 'marketing',
             channel: 'email',
             enabled: false,

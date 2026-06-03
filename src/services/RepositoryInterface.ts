@@ -11,15 +11,22 @@ export interface TransactionInterface {
     rollback: () => Promise<void>;
 };
 
+export interface UserPreferencesRepositoryInterface {
+    save(user: UserPreferences): Promise<UserPreferences>;
+    get(userId: number): Promise<UserPreferences | undefined>;
+};
+
+export interface DefaultPreferencesRepositoryInterface {
+    get(): Promise<DefaultPreferences>;
+};
+
+export interface GlobalPoliciesRepositoryInterface {
+    get(): Promise<GlobalPolicies>;
+};
+
 export default interface RepositoryInterface {
     transaction: TransactionInterface;
-
-    getGlobalPolicies(): Promise<GlobalPolicies>;
-    saveGlobalPolicies(globalPolicies: GlobalPolicies): Promise<GlobalPolicies>;
-
-    getUserPreferences(userId: number): Promise<UserPreferences | undefined>;
-    saveUserPreferences(user: UserPreferences): Promise<UserPreferences>;
-
-    getDefaultPreferences(): Promise<DefaultPreferences>;
-    saveDefaultPreferences(defaultPreferences: DefaultPreferences): Promise<DefaultPreferences>;
+    userPreferences: UserPreferencesRepositoryInterface;
+    defaultPreferences: DefaultPreferencesRepositoryInterface;
+    globalPolicies: GlobalPoliciesRepositoryInterface;
 }

@@ -47,12 +47,12 @@ export default class EvaluationService {
     }
 
     private async initGlobalPolicies() {
-        const globalPolicies = await this.repo.getGlobalPolicies();
+        const globalPolicies = await this.repo.globalPolicies.get();
         this.policiesEvaluation = new GlobalePoliciesEvaluation(globalPolicies);
     }
 
     private async initUserPreferences({ userId }: EvaluateRequestDTO) {
-        const user = await this.repo.getUserPreferences(userId);
+        const user = await this.repo.userPreferences.get(userId);
         if (!user) {
             throw new Error(`Не найден пользователь: ${userId}`);
         }

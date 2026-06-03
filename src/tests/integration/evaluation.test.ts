@@ -11,6 +11,17 @@ import RegionPolicy from "../../domain/RegionPolicy.ts";
 
 const repo = await initializeRepository();
 
+repo.globalPolicies.get = async () => {
+    return new GlobalPolicies([
+        new RegionPolicy({
+            region: 'Asia',
+            type: 'marketing',
+            channel: 'push',
+            enabled: false,
+        }),
+    ])
+};
+
 describe('evaluation service', async () => {
     afterAll(async () => {
         await repo.transaction.rollback();
@@ -18,16 +29,7 @@ describe('evaluation service', async () => {
 
     await repo.transaction.start();
 
-    await repo.saveGlobalPolicies(new GlobalPolicies([
-        new RegionPolicy({
-            region: 'Asia',
-            type: 'marketing',
-            channel: 'push',
-            enabled: false,
-        }),
-    ]));
-
-    await repo.saveUserPreferences(new UserPreferences({
+    await repo.userPreferences.save(new UserPreferences({
         userId: -1,
         quietHours: new QuietHours({
             start: '23:00',
