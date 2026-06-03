@@ -2,7 +2,7 @@ import "dotenv/config";
 
 export default {
     app: {
-        port: 3000,
+        port: process.env.APP_PORT,
     },
     db: {
         postgres: {

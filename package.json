@@ -4,8 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "node --loader ts-node/esm src/main.ts",
-    "watch": "node --watch --loader ts-node/esm src/main.ts",
+    "start": "npm run ts src/main.ts",
+    "watch": "npm run ts -- --watch src/main.ts",
+    "db:init": "npm run ts src/init.db.ts",
+    "db:migration:run": "typeorm-ts-node-esm migration:run -d ./src/repos/TypeORM/PostgresMigration.ts",
+    "db:migration:revert": "typeorm-ts-node-esm migration:revert -d ./src/repos/TypeORM/PostgresMigration.ts",
+    "ts": "node --no-warnings --loader ts-node/esm",
     "test": "vitest"
   },
   "devDependencies": {
