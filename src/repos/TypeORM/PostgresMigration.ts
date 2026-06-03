@@ -1,9 +1,9 @@
 import { DataSource } from "typeorm";
-import { config } from "./PostgresDataSource.ts";
+import { options } from "./PostgresDataSource.ts";
 
 const dirname = import.meta.dirname;
 
 export default new DataSource({
-    ...config,
+    ...options,
     migrations: [dirname + '/migrations_postgres/**/*{.js,.ts}'],
 });
