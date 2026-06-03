@@ -6,6 +6,7 @@ import type PostUserPreferencesDTO from "../../dto/PostUserPreferencesDTO.ts";
 import DefaultPreferences from "../../domain/DefaultPreferences.ts";
 import DefaultPreference from "../../domain/DefaultPreference.ts";
 import GlobalPolicies from "../../domain/GlobalPolicies.ts";
+import type { NotificationPreferenceData } from "../../domain/NotificationPreference.ts";
 
 const repo = provideRepository();
 
@@ -198,4 +199,27 @@ test('post same user request two times should get the same result', async () => 
         .get(`/users/${userId}/preferences`)
 
     expect(response1.body).toMatchObject(response2.body);
+});
+
+test('put request for change only one notification preference', async () => {
+    const { userId, userPreferences } = dataset[4];
+    if (!userPreferences.preferences) throw new Error();
+    const preference0 = userPreferences.preferences[0];
+    const preference1 = { ...userPreferences.preferences[1], enabled: false };
+
+    let response = await request(app)
+        .put(`/users/${userId}/preferences/notification`)
+        .set('Accept', 'application/json')
+        .send(preference1);
+
+    expect(response.statusCode).toBe(200);
+
+    response = await request(app)
+        .get(`/users/${userId}/preferences`);
+
+    expect(response.body.preferences.length).toBe(2);
+    expect(response.body.preferences).toMatchObject([
+        preference0,
+        preference1,
+    ]);
 });
