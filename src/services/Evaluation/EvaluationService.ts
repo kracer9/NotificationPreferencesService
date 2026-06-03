@@ -4,6 +4,7 @@ import type EvaluateRequestDTO from "../../dto/EvaluateRequestDTO.ts";
 import type EvaluateResponseDTO from "../../dto/EvaluateResponseDTO.ts";
 import UserEvaluation from "./UserEvaulation.ts";
 import GlobalePoliciesEvaluation from "./GlobalPoliciesEvaluation.ts";
+import NotFound from "../../errors/NotFound.ts";
 
 export default class EvaluationService {
     private repo: RepositoryInterface;
@@ -54,7 +55,7 @@ export default class EvaluationService {
     private async initUserPreferences({ userId }: EvaluateRequestDTO) {
         const user = await this.repo.userPreferences.get(userId);
         if (!user) {
-            throw new Error(`Не найден пользователь: ${userId}`);
+            throw new NotFound('user_not_found');
         }
         this.userEvaluation = new UserEvaluation(user);
     }

@@ -6,6 +6,7 @@ import NotificationPreferenceEntity from "./entities/NotificationPreferenceEntit
 import UserPreferences, { type UserPreferencesData } from "../../domain/UserPreferences.ts";
 import UserEntity from "./entities/UserEntity.ts";
 import QuietHours from "../../domain/QuietHours.ts";
+import NotFound from "../../errors/NotFound.ts";
 
 export default class UserPreferencesRepository implements UserPreferencesRepositoryInterface {
     private manager: EntityManager;
@@ -45,7 +46,7 @@ export default class UserPreferencesRepository implements UserPreferencesReposit
 
         const updatedUser = await this.get(user.userId);
         if (!updatedUser) {
-            throw new Error(`Не найден пользователь ${user.userId}`);
+            throw new NotFound('user_not_found');
         }
 
         return updatedUser;
