@@ -1,9 +1,9 @@
 import fs from "fs/promises";
 import yaml from "yaml";
-import type { GlobalPoliciesRepositoryInterface } from "../../services/RepositoryInterface";
-import GlobalPolicies from "../../domain/GlobalPolicies";
-import RegionPolicy from "../../domain/RegionPolicy";
-import type { NotificationPreferenceValueData } from "../../domain/NotificationPreference";
+import type { GlobalPoliciesRepositoryInterface } from "../../services/RepositoryInterface.ts";
+import GlobalPolicies from "../../domain/GlobalPolicies.ts";
+import RegionPolicy from "../../domain/RegionPolicy.ts";
+import type { NotificationPreferenceValueData } from "../../domain/NotificationPreference.ts";
 
 const configFilePath = 'src/configs/global_policies.yaml';
 

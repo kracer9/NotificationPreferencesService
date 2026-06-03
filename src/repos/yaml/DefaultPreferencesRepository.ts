@@ -1,9 +1,9 @@
 import fs from "fs/promises";
 import yaml from "yaml";
-import type { DefaultPreferencesRepositoryInterface } from "../../services/RepositoryInterface";
-import DefaultPreferences from "../../domain/DefaultPreferences";
-import DefaultPreference from "../../domain/DefaultPreference";
-import type { NotificationPreferenceValueData } from "../../domain/NotificationPreference";
+import type { DefaultPreferencesRepositoryInterface } from "../../services/RepositoryInterface.ts";
+import DefaultPreferences from "../../domain/DefaultPreferences.ts";
+import DefaultPreference from "../../domain/DefaultPreference.ts";
+import type { NotificationPreferenceValueData } from "../../domain/NotificationPreference.ts";
 
 const configFilePath = 'src/configs/default_preferences.yaml';
 
