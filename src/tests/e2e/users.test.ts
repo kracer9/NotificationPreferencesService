@@ -6,7 +6,6 @@ import type PostUserPreferencesDTO from "../../dto/PostUserPreferencesDTO.ts";
 import DefaultPreferences from "../../domain/DefaultPreferences.ts";
 import DefaultPreference from "../../domain/DefaultPreference.ts";
 import GlobalPolicies from "../../domain/GlobalPolicies.ts";
-import type { NotificationPreferenceData } from "../../domain/NotificationPreference.ts";
 
 const repo = provideRepository();
 
