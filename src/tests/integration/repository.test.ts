@@ -1,12 +1,21 @@
 import { test, expect } from "vitest";
 import type RepositoryInterface from "../../services/RepositoryInterface.ts";
-import { initializeRepository } from "../../services/RepositoryProvider.ts";
+import { provideRepository, initializeRepository, NotInitializedRepository } from "../../services/RepositoryProvider.ts";
 import DefaultPreferences from "../../domain/DefaultPreferences.ts";
 import GlobalPolicies from "../../domain/GlobalPolicies.ts";
 
 let repo: RepositoryInterface;
 
+test('provide uninitialized repository will throw error', () => {
+    expect(() => provideRepository()).toThrow(NotInitializedRepository);
+});
+
 test('initialize repository', async () => {
+    repo = await initializeRepository();
+    expect(repo).not.toBeUndefined();
+});
+
+test('initialize repository second time just return it', async () => {
     repo = await initializeRepository();
     expect(repo).not.toBeUndefined();
 });

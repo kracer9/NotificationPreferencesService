@@ -7,6 +7,8 @@ import GlobalPoliciesRepository from "../repos/yaml/GlobalPoliciesRepository.ts"
 
 let repository: RepositoryInterface;
 
+export class NotInitializedRepository extends Error {};
+
 export async function initializeRepository(): Promise<RepositoryInterface> {
     if (repository) return repository;
 
@@ -28,7 +30,7 @@ export async function initializeRepository(): Promise<RepositoryInterface> {
 
 export function provideRepository(): RepositoryInterface {
     if (!repository) {
-        throw new Error('Репозиторий не инициализирован');
+        throw new NotInitializedRepository('Репозиторий не инициализирован');
     }
     return repository;
 }
