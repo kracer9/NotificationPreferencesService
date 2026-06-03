@@ -28,16 +28,6 @@ export default class UserPreferences {
         this.setPreferences(data.preferences ?? []);
     }
 
-    public setQuietHours(quietHours: QuietHours | undefined) {
-        this._quietHours = quietHours;
-    }
-
-    public setPreferences(preferences: NotificationPreference[]) {
-        this._preferences = new Map(preferences.map(preference => {
-            return [preference.symbol, preference];
-        }));
-    }
-
     public get data(): UserPreferencesRawData {
         return {
             userId: this._userId,
@@ -65,5 +55,39 @@ export default class UserPreferences {
         channel: NotificationChannel,
     ): NotificationPreference | undefined {
         return this._preferences.get(`${type}_${channel}`);
+    }
+
+    public setQuietHours(quietHours: QuietHours | undefined) {
+        this._quietHours = quietHours;
+    }
+
+    public setPreferences(preferences: NotificationPreference[]) {
+        if (!this._preferences) {
+            this.initPreferencesMap(preferences);
+        } else {
+            this.updatePreferencesMap(preferences);
+        }
+    }
+
+    private initPreferencesMap(preferences: NotificationPreference[]) {
+        this._preferences = new Map(preferences.map(preference => {
+            return [preference.symbol, preference];
+        }));
+    }
+
+    private updatePreferencesMap(preferences: NotificationPreference[]) {
+        preferences.forEach(this.storePreference.bind(this));
+    }
+
+    private storePreference(preference: NotificationPreference) {
+        const oldPreference = this._preferences.get(preference.symbol);
+
+        if (!oldPreference) {
+            this._preferences.set(preference.symbol, preference);
+            return;
+        }
+
+        oldPreference.id = oldPreference.id ?? preference.id;
+        oldPreference.enabled = preference.enabled;
     }
 }
