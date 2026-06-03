@@ -69,6 +69,10 @@ export default class UserPreferences {
         }
     }
 
+    public setPreference(preference: NotificationPreference) {
+        this.storePreference(preference);
+    }
+
     private initPreferencesMap(preferences: NotificationPreference[]) {
         this._preferences = new Map(preferences.map(preference => {
             return [preference.symbol, preference];

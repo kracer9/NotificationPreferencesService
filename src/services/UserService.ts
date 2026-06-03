@@ -1,9 +1,11 @@
 import type PostUserPreferencesDTO from "../dto/PostUserPreferencesDTO.ts";
+import type PutNotificationPreferenceDTO from "../dto/PutNotificationPreferenceDTO.ts";
 import UserPreferences, { type UserPreferencesData } from "../domain/UserPreferences.ts";
 import type RepositoryInterface from "./RepositoryInterface.ts";
 import { provideRepository } from "./RepositoryProvider.ts";
 import QuietHours from "../domain/QuietHours.ts";
 import NotificationPreference from "../domain/NotificationPreference.ts";
+import NotFound from "../errors/NotFound.ts";
 
 export default class UserService {
     private repo: RepositoryInterface;
@@ -15,18 +17,35 @@ export default class UserService {
     public async getUserPreferences(userId: number): Promise<UserPreferences> {
         const user = await this.repo.userPreferences.get(userId);
         if (!user) {
-            throw new Error(`Не найден пользователь ${userId}`);
+            throw new NotFound('user_not_found');
         }
         return user;
     }
 
     public async postUserPreferences(userId: number, data: PostUserPreferencesDTO): Promise<UserPreferences> {
-        let user = await this.repo.userPreferences.get(userId);
+        const user = await this.repo.userPreferences.get(userId);
         if (!user) {
             return await this.createUserPreferences(userId, data);
         } else {
             return await this.updateUserPreferences(user, data);
         }
+    }
+
+    public async putNotificationPreference(userId: number, data: PutNotificationPreferenceDTO): Promise<NotificationPreference> {
+        let user = await this.repo.userPreferences.get(userId);
+        if (!user) {
+            throw new NotFound('user_not_found');
+        }
+
+        user.setPreference(new NotificationPreference(data));
+        user = await this.repo.userPreferences.save(user);
+
+        const preference = user.getPreference(data.type, data.channel);
+        if (!preference) {
+            throw new NotFound('preference_not_found');
+        }
+
+        return preference;
     }
 
     private async createUserPreferences(userId: number, data: PostUserPreferencesDTO): Promise<UserPreferences> {
