@@ -1,4 +1,4 @@
-# Сервис настройки рассылки уведомлений
+# Тестовое задание: Notification Preferences Service
 
 Стек: Node.js, TypeScript, Express.js, Vitest, TypeORM, PostgreSQL
 
