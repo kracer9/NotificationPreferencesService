@@ -5,6 +5,7 @@ import type EvaluateResponseDTO from "../../dto/EvaluateResponseDTO.ts";
 import UserEvaluation from "./UserEvaulation.ts";
 import GlobalePoliciesEvaluation from "./GlobalPoliciesEvaluation.ts";
 import NotFound from "../../errors/NotFound.ts";
+import logger from "../Logger.ts";
 
 export default class EvaluationService {
     private repo: RepositoryInterface;
@@ -17,27 +18,9 @@ export default class EvaluationService {
 
     public async evaluate(data: EvaluateRequestDTO): Promise<EvaluateResponseDTO> {
         await this.init(data);
-
-        if (!this.checkGlobalPolicies(data)) {
-            return {
-                decision: 'deny',
-                reason: 'blocked_by_global_policy',
-            };
-        }
-        if (!this.checkUserQuiteHours(data)) {
-            return {
-                decision: 'deny',
-                reason: 'blocked_by_user_quiet_hours',
-            };
-        }
-        if (!this.checkUserPreferences(data)) {
-            return {
-                decision: 'deny',
-                reason: 'blocked_by_user_notification_preferences',
-            };
-        }
-
-        return { decision: 'allow' };
+        const result = this.decide(data);
+        logger.info({data, result}, 'evaluate');
+        return result;
     }
 
     private async init(data: EvaluateRequestDTO): Promise<void> {
@@ -58,6 +41,28 @@ export default class EvaluationService {
             throw new NotFound('user_not_found');
         }
         this.userEvaluation = new UserEvaluation(user);
+    }
+
+    private decide(data: EvaluateRequestDTO): EvaluateResponseDTO {
+        if (!this.checkGlobalPolicies(data)) {
+            return {
+                decision: 'deny',
+                reason: 'blocked_by_global_policy',
+            };
+        }
+        if (!this.checkUserQuiteHours(data)) {
+            return {
+                decision: 'deny',
+                reason: 'blocked_by_user_quiet_hours',
+            };
+        }
+        if (!this.checkUserPreferences(data)) {
+            return {
+                decision: 'deny',
+                reason: 'blocked_by_user_notification_preferences',
+            };
+        }
+        return { decision: 'allow' };
     }
 
     private checkGlobalPolicies({ region, type, channel }: EvaluateRequestDTO): boolean {

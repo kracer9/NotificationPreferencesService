@@ -3,6 +3,10 @@ import "dotenv/config";
 export default {
     app: {
         port: process.env.APP_PORT,
+        logs: {
+            enabled: process.env.LOGS_ENABLED === 'true',
+            path: process.env.LOGS_PATH,
+        },
     },
     db: {
         postgres: {

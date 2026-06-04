@@ -6,6 +6,7 @@ import { provideRepository } from "./RepositoryProvider.ts";
 import QuietHours from "../domain/QuietHours.ts";
 import NotificationPreference from "../domain/NotificationPreference.ts";
 import NotFound from "../errors/NotFound.ts";
+import logger from "./Logger.ts";
 
 export default class UserService {
     private repo: RepositoryInterface;
@@ -25,13 +26,16 @@ export default class UserService {
     public async postUserPreferences(userId: number, data: PostUserPreferencesDTO): Promise<UserPreferences> {
         const user = await this.repo.userPreferences.get(userId);
         if (!user) {
+            logger.info({userId, data}, 'createUserPreferences');
             return await this.createUserPreferences(userId, data);
         } else {
+            logger.info({userId, data}, 'updateUserPreferences');
             return await this.updateUserPreferences(user, data);
         }
     }
 
     public async putNotificationPreference(userId: number, data: PutNotificationPreferenceDTO): Promise<NotificationPreference> {
+        logger.info({userId, data}, 'putNotificationPreference');
         let user = await this.repo.userPreferences.get(userId);
         if (!user) {
             throw new NotFound('user_not_found');
