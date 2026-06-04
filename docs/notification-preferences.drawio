@@ -213,7 +213,7 @@
         <mxCell id="hnZmqSQ3gEpCayHHvVLt-23" parent="hnZmqSQ3gEpCayHHvVLt-22" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ region: string" vertex="1">
           <mxGeometry height="26" width="240" y="26" as="geometry" />
         </mxCell>
-        <mxCell id="hnZmqSQ3gEpCayHHvVLt-24" parent="hnZmqSQ3gEpCayHHvVLt-22" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ preferenve: NotificationPreferenceValue" vertex="1">
+        <mxCell id="hnZmqSQ3gEpCayHHvVLt-24" parent="hnZmqSQ3gEpCayHHvVLt-22" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ preference: NotificationPreferenceValue" vertex="1">
           <mxGeometry height="26" width="240" y="52" as="geometry" />
         </mxCell>
         <mxCell id="hnZmqSQ3gEpCayHHvVLt-53" parent="hnZmqSQ3gEpCayHHvVLt-22" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" value="+ symbol: string" vertex="1">
