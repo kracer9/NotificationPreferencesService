@@ -7,13 +7,15 @@
 1. Перейдите в корень проекта
 2. Создайте файл `.env`, скопируйте в него содержимое `.env.example`
 3. Отредактируйте настройки подключения к СУБД в `.env` при необходимости
-4. Создайте базу данных `npm run db:init`
-5. Создайте нужные таблицы в БД `npm run db:migration:run`
-6. Запустите приложение командой `npm start`
+4. Установите зависимости `npm install`
+5. Создайте базу данных `npm run db:init`
+6. Создайте нужные таблицы в БД `npm run db:migration:run`
+7. Запустите приложение командой `npm start`
 
 ```shell
 cd <notification-preferences-service-path>
 cp .env.example .env
+npm install
 npm run db:init
 npm run db:migration:run
 npm start
